@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
 import Car from './Car/Car'
+import ErrorBoundary from './ErrorBoundary/ErrorBoundary'
+import Counter from "./Counter/counter";
 
 class App extends Component {
 
@@ -45,7 +47,7 @@ class App extends Component {
     })
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     console.log('componentWillMount')
   }
 
@@ -65,13 +67,15 @@ class App extends Component {
     if (this.state.showCars) {
       cars = this.state.cars.map((car,index) =>{
         return (
-            <Car
-                key = {index}
-                name = {car.name}
-                year = {car.year}
-                onDelete = {this.deleteHandler.bind(this, index)}
-                onChangeName = { event => this.onChangeName(event.target.value, index)}
-            />
+           <ErrorBoundary key = {index}>
+             <Car
+                 key = {index}
+                 name = {car.name}
+                 year = {car.year}
+                 onDelete = {this.deleteHandler.bind(this, index)}
+                 onChangeName = { event => this.onChangeName(event.target.value, index)}
+             />
+           </ErrorBoundary>
         )
       })
     }
@@ -81,9 +85,11 @@ class App extends Component {
         {/*<h1>{this.state.pageTitle}</h1>*/}
 
         <h1>{this.props.title}</h1>
-
+        <Counter />
+        <hr/>
         <button
           onClick={this.toggleClassHandler}
+          style = {{marginTop: '10px'}}
         >Toggle class</button>
 
         <div style = {{
